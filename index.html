@@ -14,16 +14,20 @@
         <div class="product-container">
           <div class="product-image">
             <!-- We can use ":" instead of "v-bind:" -->
-            <img :src="image" alt="" />
+            <img
+              :src="image"
+              alt=""
+              :class="{ 'out-of-stock-img': !inStock }"
+            />
           </div>
           <div class="product-info">
             <a :href="url">
               <h1>{{ product }}</h1>
             </a>
             <!-- v-if removes element completely. v-show makes it hidden. -->
-            <!-- <p v-show="inStock">In Stock</p> -->
-            <p v-if="inventory > 10">In Stock</p>
-            <p v-else-if="inventory <= 10 && inventory > 0">Almost sold out</p>
+            <p v-if="inStock">In Stock</p>
+            <!-- <p v-if="inventory > 10">In Stock</p>
+            <p v-else-if="inventory <= 10 && inventory > 0">Almost sold out</p> -->
             <p v-else>Out of Stock</p>
             <p v-if="onSale">On Sale</p>
             <p v-else>Not on sale</p>
@@ -38,11 +42,18 @@
               v-for="variant in variants"
               :key="variant.id"
               @mouseover="updateImage(variant.image)"
-            >
-              {{ variant.color }}
-            </div>
+              class="color-circle"
+              :style="{ backgroundColor: variant.color }"
+            ></div>
             <!-- We can use "@" instead of "v-on:" like in Alpine -->
-            <button class="button" @click="addToCart">Add to Cart</button>
+            <button
+              class="button"
+              :class="{ disabledButton: !inStock }"
+              @click="addToCart"
+              :disabled="!inStock"
+            >
+              Add to Cart
+            </button>
             <button class="button" @click="removeFromCart">
               Remove from Cart
             </button>
